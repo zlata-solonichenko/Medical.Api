@@ -9,29 +9,22 @@ public class MedicalContext : DbContext, IDesignTimeDbContextFactory<MedicalCont
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<Patient> Patients { get; set; }
 
-    public MedicalContext(DbContextOptions<MedicalContext> options)
+    public MedicalContext(){}
+
+    public MedicalContext(DbContextOptions<MedicalContext> options) : base(options)
     {
         Database.EnsureCreated();
     }
-
-    public MedicalContext()
-    {
-        Database.EnsureCreated();
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        //optionsBuilder.UseNpgsql("");
-    }
-
-    public MedicalContext CreateDbContext(string[] args)
-    {
-        var optionBuilder = new DbContextOptionsBuilder<MedicalContext>();
-        //optionBuilder.UseNpgsql("");
-
-        return new MedicalContext(optionBuilder.Options);
-    }
-
+    
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="options">параметры</param>
+    // public MedicalContext(DbContextOptions options) : base(options)
+    // {
+    //     Database.EnsureCreated();
+    // }
+    
     /// <summary>
     /// Связь один ко многим (один врач - много пациентов)
     /// </summary>
@@ -45,5 +38,19 @@ public class MedicalContext : DbContext, IDesignTimeDbContextFactory<MedicalCont
         modelBuilder.Entity<Patient>().HasKey(p => p.Id);
 
     }
-    
+
+    /// <summary>
+    /// Для создания контекста во время миграции
+    /// </summary>
+    /// <param name="args">аргументы</param>
+    /// <returns></returns>
+    public MedicalContext CreateDbContext(string[] args)
+    {
+        var optionsBuilder = new DbContextOptionsBuilder<MedicalContext>();
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=medical;Username=postgres;Password=postgres");
+        
+        return new MedicalContext(optionsBuilder.Options);
+    }
+
+   
 }
