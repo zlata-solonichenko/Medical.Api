@@ -1,4 +1,5 @@
 using Medical.Api.Domain.Entities;
+using Medical.Api.Repositories.Implementations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Medical.Api.Controllers;
@@ -7,9 +8,9 @@ namespace Medical.Api.Controllers;
 [Route("[controller]")]
 public class PatientController : ControllerBase
 {
-    private readonly IPatientRepository _patientRepository;
+    private readonly PatientRepository _patientRepository;
 
-    public PatientController(IPatientRepository patientRepository)
+    public PatientController(PatientRepository patientRepository)
     {
         _patientRepository = patientRepository;
     }
@@ -34,13 +35,13 @@ public class PatientController : ControllerBase
     }
 
     [HttpPost("create")] // POST: api/patient
-    public async Task<IActionResult> AddPatient([FromBody] Patient patient)
+    public async Task<IActionResult> AddPatient([FromBody] Patient patient, CancellationToken cancellationToken)
     {
         if (patient == null)
         {
             return BadRequest();
         }
-        await _patientRepository.AddAsync(patient);
+        await _patientRepository.AddAsync(patient, cancellationToken);
         return CreatedAtAction(nameof(GetPatientById), new { id = patient.Id }, patient);
     }
 

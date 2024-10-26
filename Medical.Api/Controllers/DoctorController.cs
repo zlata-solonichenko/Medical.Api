@@ -1,4 +1,6 @@
 using Medical.Api.Domain.Entities;
+using Medical.Api.Repositories.Implementations;
+using Medical.Api.UseCases.Employee;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Medical.Api.Controllers;
@@ -7,18 +9,18 @@ namespace Medical.Api.Controllers;
 [Route("[controller]")]
 public class DoctorController : ControllerBase
 {
-    private readonly IDoctorRepository _doctorRepository;
-
-    public DoctorController(IDoctorRepository doctorRepository)
+    private readonly DoctorRepository _doctorRepository;
+    
+    public DoctorController(DoctorRepository doctorRepository)
     {
         _doctorRepository = doctorRepository;
     }
 
-    [HttpGet("all")] // GET: api/doctor
+    [HttpGet("all")]
     public async Task<IActionResult> GetAllDoctors()
     {
-        var doctors = await _doctorRepository.GetAllAsync();
-        return Ok(doctors);
+        var patients = await _doctorRepository.GetAllAsync();
+        return Ok(patients);
     }
     
     [HttpGet("{id}")] // GET: api/doctor/{id}
@@ -33,14 +35,14 @@ public class DoctorController : ControllerBase
         return Ok(doctor);
     }
 
-    [HttpPost("create")] // POST: api/doctor
-    public async Task<IActionResult> AddDoctor([FromBody] Doctor doctor)
+    [HttpPost("create")] // POST: api/patient
+    public async Task<IActionResult> AddDoctor([FromBody] Doctor doctor, CancellationToken cancellationToken)
     {
         if (doctor == null)
         {
             return BadRequest();
         }
-        await _doctorRepository.AddAsync(doctor);
+        await _doctorRepository.AddAsync(doctor, cancellationToken);
         return CreatedAtAction(nameof(GetDoctorById), new { id = doctor.Id }, doctor);
     }
 

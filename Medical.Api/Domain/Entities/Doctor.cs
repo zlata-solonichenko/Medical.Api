@@ -7,7 +7,6 @@ namespace Medical.Api.Domain.Entities;
 /// </summary>
 public class Doctor
 {
-    [Key]
     /// <summary>
     /// ФИО доктора
     /// </summary>

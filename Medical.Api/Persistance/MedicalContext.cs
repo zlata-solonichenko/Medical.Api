@@ -13,17 +13,8 @@ public class MedicalContext : DbContext, IDesignTimeDbContextFactory<MedicalCont
 
     public MedicalContext(DbContextOptions<MedicalContext> options) : base(options)
     {
-        Database.EnsureCreated();
+        //Database.EnsureCreated();
     }
-    
-    /// <summary>
-    /// Конструктор
-    /// </summary>
-    /// <param name="options">параметры</param>
-    // public MedicalContext(DbContextOptions options) : base(options)
-    // {
-    //     Database.EnsureCreated();
-    // }
     
     /// <summary>
     /// Связь один ко многим (один врач - много пациентов)
